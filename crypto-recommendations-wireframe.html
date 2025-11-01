@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>数字货币与交易所推荐 - Wireframe</title>
+  <meta name="description" content="一个用于推荐加密货币与交易所的落地页线框稿（供技术搭建），包含筛选、对比、榜单与风险提示。" />
+  <style>
+    :root{
+      --bg:#0b0f13;
+      --card:#121821;
+      --muted:#6b7a90;
+      --text:#e6edf3;
+      --accent:#18c683;
+      --danger:#ff5d5d;
+      --border:#243141;
+      --chip:#1b2430;
+      --shadow: 0 4px 20px rgba(0,0,0,.25);
+      --radius:12px;
+      --radius-sm:8px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:1160px;margin:0 auto;padding:16px}
+    .flex{display:flex;gap:16px}
+    .between{justify-content:space-between;align-items:center}
+    .wrap{flex-wrap:wrap}
+    .chip{background:var(--chip);padding:6px 10px;border-radius:999px;font-size:12px;border:1px solid var(--border)}
+    header{position:sticky;top:0;background:rgba(11,15,19,.9);backdrop-filter:saturate(140%) blur(6px);border-bottom:1px solid var(--border);z-index:10}
+    nav a{font-size:14px;color:#c9d4e3;margin-right:16px}
+    .logo{font-weight:700;letter-spacing:.5px}
+    .hero{margin:20px 0;padding:24px;border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(180deg,#121821, #0e141c)}
+    .hero h1{margin:0 0 8px 0;font-size:28px}
+    .sub{color:var(--muted);margin-top:4px}
+    .controls{margin-top:16px;display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:12px}
+    .ctrl{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px}
+    select, input{width:100%;background:transparent;border:none;color:var(--text);font-size:14px;outline:none}
+    .btn{background:var(--accent);border:none;color:#052c1b;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+    .card h3{margin:0 0 8px 0;font-size:18px}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+    .meta div{background:#0f141b;border:1px solid var(--border);border-radius:10px;padding:8px;font-size:13px;color:#d2daea}
+    .score{font-weight:700}
+    .tagrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .compare{margin-top:28px}
+    table{width:100%;border-collapse:collapse;border:1px solid var(--border);overflow:hidden;border-radius:12px}
+    th,td{border-bottom:1px solid var(--border);padding:12px 10px;text-align:left;font-size:14px}
+    th{color:#a8b4c5;background:#0f151e;position:sticky;top:0}
+    tr:hover td{background:#0f141b}
+    .coins{margin-top:24px;display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+    .list .row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px dashed var(--border)}
+    .list .row .lhs{display:flex;align-items:center;gap:12px}
+    .rank{width:24px;height:24px;border-radius:6px;background:#0f151e;border:1px solid var(--border);display:grid;place-items:center;font-size:12px;color:#a8b4c5}
+    .price{font-variant-numeric:tabular-nums}
+    .up{color:#18c683}.down{color:var(--danger)}
+    .learn .item{padding:14px;border:1px solid var(--border);border-radius:12px;background:#0f151e}
+    .footer{margin-top:28px;padding:16px;border-top:1px solid var(--border);color:#9fb0c9;font-size:12px}
+    .note{color:#9fb0c9;font-size:12px;margin-top:10px}
+    .kbd{background:#0f141b;border:1px solid var(--border);border-radius:6px;padding:2px 6px;font-size:12px}
+    .section-title{margin:24px 0 8px 0}
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr 1fr}
+      .controls{grid-template-columns:1fr 1fr}
+      .coins{grid-template-columns:1fr}
+    }
+    @media (max-width: 640px){
+      .grid{grid-template-columns:1fr}
+      nav .hide-sm{display:none}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container flex between">
+      <div class="flex" style="align-items:center;gap:10px">
+        <div class="logo">Crypto Picks</div>
+        <span class="chip">草图/Wireframe</span>
+      </div>
+      <nav>
+        <a href="#exchanges">交易所</a>
+        <a href="#coins">数字货币</a>
+        <a href="#compare" class="hide-sm">对比</a>
+        <a href="#learn" class="hide-sm">新手指南</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO / FILTER -->
+    <section class="hero">
+      <h1>安全合规的交易所与主流币推荐</h1>
+      <div class="sub">根据你的需求（现货/合约、费率、法币入金、KYC、上币数量）快速筛选与对比。<span class="kbd">免责声明：非投资建议</span></div>
+      <div class="controls">
+        <div class="ctrl">
+          <label style="font-size:12px;color:var(--muted)">用途</label>
+          <select>
+            <option>全部</option>
+            <option>现货</option>
+            <option>合约/杠杆</option>
+            <option>理财/收益</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <label style="font-size:12px;color:var(--muted)">KYC</label>
+          <select>
+            <option>不限</option>
+            <option>必须KYC</option>
+            <option>可匿名/仅邮箱</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <label style="font-size:12px;color:var(--muted)">入金方式</label>
+          <select>
+            <option>不限</option>
+            <option>银行卡/快捷买币</option>
+            <option>P2P</option>
+          </select>
+        </div>
+        <button class="btn">应用筛选</button>
+      </div>
+      <div class="note">技术说明：筛选仅前端占位，实际由后端/接口计算过滤；所有跳转应追加 <code>?aff_id=YOUR_ID&amp;utm_source=site</code>。</div>
+    </section>
+
+    <!-- EXCHANGES GRID -->
+    <section id="exchanges">
+      <h2 class="section-title">推荐交易所 Top 6</h2>
+      <div class="grid">
+        <!-- Card sample (repeat for each exchange from data) -->
+        <article class="card">
+          <h3>Binance <span class="chip">流动性最充足</span></h3>
+          <div class="meta">
+            <div>现货费率：<span class="score">0.1% 起</span></div>
+            <div>上币数量：<span class="score">350+ </span></div>
+            <div>合约深度：<span class="score">高</span></div>
+            <div>法币入金：银行卡 / P2P</div>
+          </div>
+          <div class="tagrow">
+            <span class="chip">KYC</span>
+            <span class="chip">储备证明</span>
+            <span class="chip">风控强</span>
+          </div>
+          <div class="flex between" style="margin-top:12px">
+            <a href="#go" class="btn" style="padding:8px 12px">去开通</a>
+            <small class="sub">安全评分：9.4/10</small>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>OKX <span class="chip">衍生品强</span></h3>
+          <div class="meta">
+            <div>现货费率：0.08% 起</div>
+            <div>上币数量：300+</div>
+            <div>合约深度：高</div>
+            <div>法币入金：P2P</div>
+          </div>
+          <div class="tagrow">
+            <span class="chip">储备证明</span>
+            <span class="chip">Earn产品</span>
+          </div>
+          <div class="flex between" style="margin-top:12px">
+            <a href="#go" class="btn" style="padding:8px 12px">去开通</a>
+            <small class="sub">安全评分：9.1/10</small>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Bybit <span class="chip">合约小白友好</span></h3>
+          <div class="meta">
+            <div>现货费率：0.1% 起</div>
+            <div>上币数量：300+</div>
+            <div>合约深度：中-高</div>
+            <div>法币入金：银行卡 / P2P</div>
+          </div>
+          <div class="tagrow">
+            <span class="chip">学习专区</span>
+            <span class="chip">自动跟单</span>
+          </div>
+          <div class="flex between" style="margin-top:12px">
+            <a href="#go" class="btn" style="padding:8px 12px">去开通</a>
+            <small class="sub">安全评分：8.8/10</small>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Gate.io <span class="chip">新币多</span></h3>
+          <div class="meta">
+            <div>现货费率：0.2%</div>
+            <div>上币数量：1400+</div>
+            <div>合约深度：中</div>
+            <div>法币入金：P2P</div>
+          </div>
+          <div class="tagrow">
+            <span class="chip">Launchpad</span>
+            <span class="chip">理财</span>
+          </div>
+          <div class="flex between" style="margin-top:12px">
+            <a href="#go" class="btn" style="padding:8px 12px">去开通</a>
+            <small class="sub">安全评分：8.1/10</small>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Kraken <span class="chip">合规友好</span></h3>
+          <div class="meta">
+            <div>现货费率：0.16% 起</div>
+            <div>上币数量：220+</div>
+            <div>合约深度：中</div>
+            <div>法币入金：银行卡</div>
+          </div>
+          <div class="tagrow">
+            <span class="chip">监管</span>
+            <span class="chip">安全口碑</span>
+          </div>
+          <div class="flex between" style="margin-top:12px">
+            <a href="#go" class="btn" style="padding:8px 12px">去开通</a>
+            <small class="sub">安全评分：9.0/10</small>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Bitget <span class="chip">复制交易</span></h3>
+          <div class="meta">
+            <div>现货费率：0.1%</div>
+            <div>上币数量：500+</div>
+            <div>合约深度：中</div>
+            <div>法币入金：P2P</div>
+          </div>
+          <div class="tagrow">
+            <span class="chip">复制跟单</span>
+            <span class="chip">活动多</span>
+          </div>
+          <div class="flex between" style="margin-top:12px">
+            <a href="#go" class="btn" style="padding:8px 12px">去开通</a>
+            <small class="sub">安全评分：8.3/10</small>
+          </div>
+        </article>
+      </div>
+      <div class="note">占位数据，技术可接入你方 API / 表格。每卡片均暴露 exchange_id 供埋点。</div>
+    </section>
+
+    <!-- COMPARE TABLE -->
+    <section id="compare" class="compare">
+      <h2 class="section-title">快速对比</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>交易所</th><th>Maker/Taker</th><th>法币入金</th><th>KYC</th><th>合约</th><th>上币数量</th><th>储备证明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Binance</td><td>0.1% / 0.1%</td><td>银行卡 / P2P</td><td>必需</td><td>是</td><td>350+</td><td>有</td></tr>
+          <tr><td>OKX</td><td>0.08% / 0.1%</td><td>P2P</td><td>视地区</td><td>是</td><td>300+</td><td>有</td></tr>
+          <tr><td>Bybit</td><td>0.1% / 0.1%</td><td>银行卡 / P2P</td><td>视地区</td><td>是</td><td>300+</td><td>有</td></tr>
+          <tr><td>Gate.io</td><td>0.2% / 0.2%</td><td>P2P</td><td>视地区</td><td>是</td><td>1400+</td><td>部分</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- COINS + ASIDE -->
+    <section id="coins" class="coins">
+      <div>
+        <h2 class="section-title">主流币推荐（长期观察）</h2>
+        <div class="list card">
+          <div class="row">
+            <div class="lhs"><div class="rank">1</div><strong>BTC</strong><span class="chip">价值储存</span></div>
+            <div class="price">¥ 470,000 <span class="up">+1.8%</span></div>
+          </div>
+          <div class="row">
+            <div class="lhs"><div class="rank">2</div><strong>ETH</strong><span class="chip">生态/DeFi</span></div>
+            <div class="price">¥ 23,000 <span class="down">-0.7%</span></div>
+          </div>
+          <div class="row">
+            <div class="lhs"><div class="rank">3</div><strong>BNB</strong><span class="chip">交易所公链</span></div>
+            <div class="price">¥ 2,300 <span class="up">+0.2%</span></div>
+          </div>
+          <div class="row">
+            <div class="lhs"><div class="rank">4</div><strong>SOL</strong><span class="chip">高性能公链</span></div>
+            <div class="price">¥ 1,050 <span class="up">+3.4%</span></div>
+          </div>
+          <div class="row">
+            <div class="lhs"><div class="rank">5</div><strong>USDT</strong><span class="chip">稳定币</span></div>
+            <div class="price">¥ 7.30</div>
+          </div>
+        </div>
+        <div class="note">技术：此处接行情 WebSocket/轮询；本草图用静态占位。</div>
+      </div>
+      <aside>
+        <h2 class="section-title">风险提示 &amp; 新手引导</h2>
+        <div class="learn">
+          <div class="item">
+            <strong>风险提示：</strong>
+            <ul>
+              <li>加密资产波动大，请量力而行；本文不构成投资建议。</li>
+              <li>遵守所在国家/地区法律法规，完成必要的身份认证（KYC）。</li>
+              <li>启用两步验证（2FA）、反钓鱼码与提现白名单。</li>
+            </ul>
+          </div>
+          <div class="item" style="margin-top:12px">
+            <strong>新手必读：</strong>
+            <ol>
+              <li>注册交易所账号 → 完成 KYC → 开启安全设置</li>
+              <li>法币入金（银行卡 / P2P）→ 购买 USDT</li>
+              <li>用 USDT 兑换目标币 → 学会限价单与止盈止损</li>
+            </ol>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- LEARN / CONTENT -->
+    <section id="learn" style="margin-top:24px">
+      <h2 class="section-title">内容区（SEO 文章占位）</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>如何选择交易所：看哪 6 个维度？</h3>
+          <p class="sub">费率、深度与滑点、法币入金、上币质量、安全与合规、移动端体验。</p>
+        </article>
+        <article class="card">
+          <h3>新手防坑清单</h3>
+          <p class="sub">警惕高收益承诺、冷门币拉盘、虚假空投、私聊转账等。</p>
+        </article>
+        <article class="card">
+          <h3>长期持有 vs 网格/定投</h3>
+          <p class="sub">给出不同风险偏好的示意策略，仅作教育用途。</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="card" style="margin-top:24px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div>
+        <h3 style="margin:0">需要一对一选型建议？</h3>
+        <p class="sub" style="margin:6px 0 0 0">留下你的邮箱，我们会发送配置清单与开户指引（可附带返佣福利）。</p>
+      </div>
+      <form onsubmit="return false" class="flex wrap">
+        <input placeholder="你的邮箱" style="background:#0f141b;border:1px solid var(--border);border-radius:8px;padding:10px 12px" />
+        <button class="btn" aria-label="subscribe">获取指引</button>
+      </form>
+    </section>
+
+    <!-- FOOTER -->
+    <section class="footer">
+      <div>© 2025 Crypto Picks. 本页为线框稿（草图），内容仅演示。最终数据以后端/官方为准。</div>
+      <div style="margin-top:6px">合规建议：展示各地区可用性与限制；为每个交易所设置 <em>合规地区白名单/黑名单</em> 标签。</div>
+    </section>
+  </main>
+
+  <!-- JSON 数据协议（给后端/前端对接） -->
+  <script type="application/json" id="exchanges-schema">
+  {
+    "exchanges": [
+      {
+        "exchange_id": "binance",
+        "name": "Binance",
+        "maker": 0.001,
+        "taker": 0.001,
+        "fiat_onramp": ["card","p2p"],
+        "kyc": "required",
+        "derivatives": true,
+        "listings": 350,
+        "por": true,
+        "safety_score": 9.4,
+        "aff_url": "https://example.com/binance?aff_id=YOUR_ID&utm_source=site"
+      }
+    ],
+    "coins":[
+      {"symbol":"BTC","tags":["store-of-value"]},
+      {"symbol":"ETH","tags":["defi","l2"]},
+      {"symbol":"BNB","tags":["exchange-chain"]}
+    ]
+  }
+  </script>
+
+  <!-- 结构化数据（可选：SEO 列表） -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "推荐交易所",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Binance","url":"https://example.com/binance"},
+      {"@type":"ListItem","position":2,"name":"OKX","url":"https://example.com/okx"},
+      {"@type":"ListItem","position":3,"name":"Bybit","url":"https://example.com/bybit"}
+    ]
+  }
+  </script>
+
+  <!-- 埋点事件命名建议（示例）
+    - click_exchange_open: {exchange_id, position, aff_id}
+    - filter_applied: {purpose, kyc, onramp}
+    - coin_row_click: {symbol, rank}
+  -->
+</body>
+</html>
